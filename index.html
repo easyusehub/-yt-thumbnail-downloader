@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>YouTube Thumbnail Downloader & Tag Extractor – EasyUseHub</title>
+    <title>YouTube Thumbnail Downloader – EasyUseHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <style>
         :root { --primary: #ff0000; --secondary: #2563eb; --bg: #f5f7fa; }
@@ -22,9 +22,8 @@
         #push-notification img { width: 50px; height: 50px; border-radius: 8px; margin-right: 12px; }
         .push-text b { font-size: 14px; display: block; }
         .push-text p { font-size: 12px; color: #666; margin: 3px 0; }
-        .close-push { position: absolute; top: 5px; right: 10px; font-weight: bold; color: #999; font-size: 18px; cursor: pointer; }
 
-        /* Custom Ad Bridge (Original Styles Kept) */
+        /* Custom Ad Bridge (3 Ads included) */
         .custom-ad-bridge {
             background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;
             padding: 22px; margin: 15px 0; border-radius: 12px; cursor: pointer;
@@ -35,20 +34,14 @@
         .ad-btn { background: #fbbf24; color: #000; padding: 7px 18px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; font-size: 13px; }
 
         /* Downloader UI */
-        .downloader-box { background: #fff; padding: 35px 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); margin-bottom: 25px; }
-        input { width: 85%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; margin-bottom: 15px; box-sizing: border-box; }
+        .downloader-box { background: #fff; padding: 35px 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        input { width: 85%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; margin-bottom: 15px; }
         input:focus { border-color: var(--primary); }
-        .main-btn { background: var(--primary); color: #fff; padding: 15px 35px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 17px; width: 85%; transition: 0.2s; }
-        .main-btn:active { transform: scale(0.98); }
+        .main-btn { background: var(--primary); color: #fff; padding: 15px 35px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 17px; width: 85%; }
 
-        /* Results Area */
         #resultArea { margin-top: 30px; display: none; }
         #resultArea img { width: 100%; max-width: 500px; border-radius: 10px; border: 3px solid #eee; margin-bottom: 15px; }
-        
-        #tagResultArea { margin-top: 20px; display: none; text-align: left; background: #f9fafb; padding: 15px; border-radius: 10px; border: 1px solid #eee; }
-        .tag-chip { display: inline-block; background: #e2e8f0; color: #334155; padding: 6px 12px; border-radius: 20px; margin: 4px; font-size: 14px; border: 1px solid #cbd5e1; }
-        
-        .download-link { background: #059669; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; cursor: pointer; border: none; font-size: 16px; margin-top: 10px; }
+        .download-link { background: #059669; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; cursor: pointer; border: none; font-size: 16px; }
 
         .buttons { margin-top: 25px; display: flex; justify-content: center; gap: 10px; }
         .buttons button { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; color: #fff; font-weight: bold; flex: 1; max-width: 150px; }
@@ -68,7 +61,7 @@
 </div>
 
 <header>
-    <h2 style="margin:0; color: #333;">EasyUseHub - YouTube Thumbnail Downloader & Tag Extractor</h2>
+    <h2 style="margin:0; color: #333;">EasyUseHub - YT Downloader</h2>
 </header>
 
 <div class="container">
@@ -92,19 +85,6 @@
         </div>
     </div>
 
-    <div class="downloader-box">
-        <h1 style="color: var(--secondary);">YouTube Tag Extractor</h1>
-        <input type="text" id="tagUrl" placeholder="Paste YouTube Link for Tags...">
-        <br>
-        <button class="main-btn" style="background: var(--secondary);" onclick="getTags()">Extract Video Tags</button>
-
-        <div id="tagResultArea">
-            <p style="font-weight:bold; margin-bottom:10px;">Extracted Tags:</p>
-            <div id="tagsList"></div>
-            <button class="download-link" style="width:100%; margin-top:15px;" onclick="copyTags()">Copy All Tags</button>
-        </div>
-    </div>
-
     <div class="custom-ad-bridge" style="background: linear-gradient(135deg, #059669, #10b981);" onclick="window.open('https://easyusehub.blogspot.com/p/image-compressor.html', '_blank')">
         <span class="ad-title">⚡ High-Speed Image Compressor</span>
         <p style="margin:5px 0; font-size: 14px;">Reduce image size up to 90% without losing quality!</p>
@@ -125,17 +105,12 @@
 </div>
 
 <script>
-    function showPushAd() {
-        setTimeout(() => {
-            document.getElementById('push-notification').classList.add('active');
-        }, 1000);
-    }
-
-    // Thumbnail Logic
     async function downloadImage(imageSrc) {
+        // This function fixes the download issue by fetching image as Blob
         const image = await fetch(imageSrc);
         const imageBlog = await image.blob();
         const imageURL = URL.createObjectURL(imageBlog);
+
         const link = document.createElement('a');
         link.href = imageURL;
         link.download = 'EasyUseHub_YT_Thumbnail.jpg';
@@ -147,6 +122,7 @@
     function getThumb() {
         let url = document.getElementById('videoUrl').value;
         let vId = "";
+
         const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
         const match = url.match(regex);
         vId = (match && match[1]) ? match[1] : "";
@@ -154,31 +130,23 @@
         if (vId) {
             let imgUrl = `https://img.youtube.com/vi/${vId}/maxresdefault.jpg`;
             document.getElementById('thumbPreview').src = imgUrl;
-            document.getElementById('downloadBtn').onclick = function() { downloadImage(imgUrl); };
+            
+            // Set up the download button to use the new fix
+            document.getElementById('downloadBtn').onclick = function() {
+                downloadImage(imgUrl);
+            };
+
             document.getElementById('resultArea').style.display = "block";
-            showPushAd();
+            
+            // Trigger Push Notification
+            setTimeout(() => {
+                document.getElementById('push-notification').classList.add('active');
+            }, 1000);
         } else {
             alert("Please paste a valid YouTube video link!");
         }
     }
+</script>
 
-    // Improved Tag Extractor Logic
-    async function getTags() {
-        const url = document.getElementById('tagUrl').value;
-        if (!url) return alert("Please paste a link first!");
-
-        const list = document.getElementById('tagsList');
-        const box = document.getElementById('tagResultArea');
-        
-        list.innerHTML = "<div style='color:#666;'>Extracting... This may take a moment.</div>";
-        box.style.display = "block";
-
-        try {
-            // Using a timestamped proxy to bypass cache errors
-            const proxyUrl = `https://api.allorigins.win/get?url=${encodeURIComponent(url)}&ts=${Date.now()}`;
-            
-            const response = await fetch(proxyUrl);
-            if (!response.ok) throw new Error('Proxy error');
-            
-            const data = await response.json();
-            const html = data.
+</body>
+</html>
