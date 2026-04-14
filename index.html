@@ -2,147 +2,148 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>EasyUseHub – Professional YT Thumbnail Downloader</title>
+    <title>YouTube Thumbnail Downloader – EasyUseHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Download YouTube Thumbnails in Full HD. Fast, Secure, and 100% Free by EasyUseHub.">
     <style>
-        :root { --primary: #ff0000; --secondary: #2563eb; --bg: #f8fafc; --text: #1e293b; }
-        body { margin:0; font-family: 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); line-height: 1.6; }
-        
-        /* Smooth Scroll & Transitions */
-        * { transition: all 0.3s ease; box-sizing: border-box; }
+        :root { --primary: #ff0000; --secondary: #2563eb; --bg: #f5f7fa; }
+        body{ margin:0; font-family:Arial, sans-serif; background: var(--bg); text-align:center; overflow-x: hidden; }
+        header{ background:#fff; padding:15px; box-shadow:0 2px 5px rgba(0,0,0,.1); position: sticky; top: 0; z-index: 1000; }
+        .container{ width:92%; max-width:850px; margin:25px auto; }
 
-        header { background:#fff; padding:20px; box-shadow:0 4px 12px rgba(0,0,0,0.05); position: sticky; top:0; z-index: 100; }
-        .logo { font-size: 24px; font-weight: 800; color: var(--primary); text-decoration: none; }
-
-        .container { width:95%; max-width:850px; margin:40px auto; padding-bottom: 50px; }
-
-        /* Push Notification - Engineered for 100% Visibility */
+        /* Push Notification */
         #push-notification {
-            position: fixed; bottom: -150px; right: 20px; width: 320px; background: #fff;
-            border-radius: 12px; box-shadow: 0 15px 35px rgba(0,0,0,0.15); display: flex;
-            align-items: center; padding: 15px; z-index: 9999; border-left: 6px solid var(--secondary);
+            position: fixed; bottom: -150px; right: 20px; width: 300px; background: #fff;
+            border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.2); display: flex;
+            align-items: center; padding: 12px; z-index: 10000;
+            transition: bottom 0.6s cubic-bezier(0.68, -0.55, 0.27, 1.55); cursor: pointer;
+            border-left: 5px solid var(--secondary);
         }
         #push-notification.active { bottom: 20px; }
-        #push-notification img { width: 55px; height: 55px; border-radius: 10px; margin-right: 15px; }
-        .push-text b { font-size: 15px; display: block; margin-bottom: 2px; }
-        .push-text p { font-size: 12px; color: #64748b; margin: 0; }
-        .close-push { position: absolute; top: 8px; right: 12px; font-size: 20px; color: #94a3b8; cursor: pointer; }
+        #push-notification img { width: 50px; height: 50px; border-radius: 8px; margin-right: 12px; }
+        .push-text b { font-size: 14px; display: block; }
+        .push-text p { font-size: 12px; color: #666; margin: 3px 0; }
 
-        /* Professional Ad Bridges */
-        .ad-card {
-            background: linear-gradient(135deg, #0f172a, #1e293b); color: #fff;
-            padding: 30px; margin: 25px 0; border-radius: 16px; cursor: pointer;
-            text-align: left; position: relative; overflow: hidden;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+        /* Custom Ad Bridge (3 Ads included) */
+        .custom-ad-bridge {
+            background: linear-gradient(135deg, #1e3a8a, #2563eb); color: white;
+            padding: 22px; margin: 15px 0; border-radius: 12px; cursor: pointer;
+            box-shadow: 0 4px 15px rgba(37, 99, 235, 0.2); transition: 0.3s;
         }
-        .ad-card::after { content: ''; position: absolute; top: -50%; right: -20%; width: 200px; height: 200px; background: rgba(255,255,255,0.05); border-radius: 50%; }
-        .ad-title { font-size: 22px; font-weight: 700; margin-bottom: 8px; color: #f1f5f9; }
-        .ad-badge { background: #fbbf24; color: #000; padding: 6px 15px; border-radius: 20px; font-size: 12px; font-weight: 900; position: absolute; top: 20px; right: 20px; }
-        .ad-btn { background: var(--secondary); color: #fff; padding: 10px 25px; border-radius: 8px; font-weight: 600; display: inline-block; margin-top: 15px; border: none; }
+        .custom-ad-bridge:hover { transform: scale(1.02); }
+        .ad-title { font-size: 18px; font-weight: bold; display: block; }
+        .ad-btn { background: #fbbf24; color: #000; padding: 7px 18px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; font-size: 13px; }
 
-        /* Main Downloader UI */
-        .tool-ui { background: #fff; padding: 40px; border-radius: 20px; box-shadow: 0 1px 3px rgba(0,0,0,0.1); border: 1px solid #e2e8f0; }
-        h1 { font-size: 28px; margin-bottom: 10px; color: #0f172a; }
-        .input-group { position: relative; margin-top: 25px; }
-        input { width: 100%; padding: 18px; border: 2px solid #e2e8f0; border-radius: 12px; font-size: 16px; outline: none; }
-        input:focus { border-color: var(--primary); box-shadow: 0 0 0 4px rgba(255,0,0,0.1); }
-        .main-btn { width: 100%; background: var(--primary); color: #fff; padding: 18px; border: none; border-radius: 12px; cursor: pointer; font-weight: 700; font-size: 18px; margin-top: 15px; }
-        .main-btn:active { transform: scale(0.98); }
+        /* Downloader UI */
+        .downloader-box { background: #fff; padding: 35px 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
+        input { width: 85%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; margin-bottom: 15px; }
+        input:focus { border-color: var(--primary); }
+        .main-btn { background: var(--primary); color: #fff; padding: 15px 35px; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 17px; width: 85%; }
 
-        /* Image Display Section */
-        #result { margin-top: 35px; display: none; animation: fadeIn 0.5s ease-out; }
-        #result img { width: 100%; border-radius: 12px; box-shadow: 0 8px 20px rgba(0,0,0,0.1); border: 1px solid #ddd; }
-        .dl-options { display: grid; grid-template-columns: 1fr; gap: 10px; margin-top: 20px; }
-        .dl-link { padding: 15px; border-radius: 10px; text-decoration: none; font-weight: 700; color: #fff; background: #059669; }
+        #resultArea { margin-top: 30px; display: none; }
+        #resultArea img { width: 100%; max-width: 500px; border-radius: 10px; border: 3px solid #eee; margin-bottom: 15px; }
+        .download-link { background: #059669; color: #fff; padding: 14px 30px; border-radius: 8px; text-decoration: none; font-weight: bold; display: inline-block; cursor: pointer; border: none; font-size: 16px; }
 
-        /* Responsive Grid Buttons */
-        .footer-nav { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-top: 30px; }
-        .btn-nav { padding: 15px; border-radius: 10px; border: none; cursor: pointer; font-weight: 700; color: #fff; }
-        .btn-pdf { background: #10b981; }
-        .btn-home { background: #f59e0b; }
-
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
-        @media (max-width: 600px) { .ad-title { font-size: 18px; } #push-notification { width: 90%; right: 5%; } }
+        .buttons { margin-top: 25px; display: flex; justify-content: center; gap: 10px; }
+        .buttons button { padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; color: #fff; font-weight: bold; flex: 1; max-width: 150px; }
+        .tools { background: #10b981; }
+        .home { background: #f59e0b; }
     </style>
 </head>
 <body>
-
-<header>
-    <a href="https://easyusehub.blogspot.com" class="logo">EasyUseHub</a>
-</header>
 
 <div id="push-notification" onclick="window.open('https://easyusehub.blogspot.com', '_blank')">
     <span class="close-push" onclick="event.stopPropagation(); document.getElementById('push-notification').classList.remove('active');">&times;</span>
     <img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png" alt="icon">
     <div class="push-text">
-        <b>🚀 46+ Premium Tools Ready!</b>
-        <p>PDF Tools, Calculators & More at EasyUseHub.</p>
+        <b>🚀 46+ Pro Tools at EasyUseHub!</b>
+        <p>Try PDF Editor, Image Compressor & Calculators for FREE.</p>
     </div>
 </div>
 
+<header>
+    <h2 style="margin:0; color: #333;">EasyUseHub - YT Downloader</h2>
+</header>
+
 <div class="container">
-    <div class="ad-card" onclick="window.open('https://easyusehub.blogspot.com', '_blank')">
-        <span class="ad-badge">100% FREE</span>
-        <div class="ad-title">Access All Premium Tools</div>
-        <p>Join thousands of users using our 46+ All-in-One web utilities daily.</p>
-        <button class="ad-btn">Open Hub</button>
+
+    <div class="custom-ad-bridge" onclick="window.open('https://easyusehub.blogspot.com', '_blank')">
+        <span class="ad-title">🎁 Get 46+ Premium Web Tools!</span>
+        <p style="margin:5px 0; font-size: 14px;">All PDF Tools, Age Calculator, BMI Tracker & More - 100% Free</p>
+        <div class="ad-btn">Open EasyUseHub</div>
     </div>
 
-    <div class="tool-ui">
+    <div class="downloader-box">
         <h1>YouTube Thumbnail Downloader</h1>
-        <p style="color: #64748b;">Get High-Quality (HD) thumbnails from any video instantly.</p>
-        
-        <div class="input-group">
-            <input type="text" id="ytUrl" placeholder="Paste YouTube Video Link Here...">
-            <button class="main-btn" onclick="fetchThumb()">Get Thumbnails</button>
-        </div>
+        <input type="text" id="videoUrl" placeholder="Paste YouTube Link (e.g. https://youtu.be/...)">
+        <br>
+        <button class="main-btn" onclick="getThumb()">Extract HD Thumbnail</button>
 
-        <div id="result">
-            <img id="previewImg" src="" alt="Thumbnail Preview">
-            <div class="dl-options">
-                <a id="hdLink" href="#" download class="dl-link">Download HD (1080p)</a>
-            </div>
+        <div id="resultArea">
+            <img id="thumbPreview" src="" alt="Thumbnail Preview">
+            <br>
+            <button class="download-link" id="downloadBtn">Download Full HD (1080p)</button>
         </div>
     </div>
 
-    <div class="ad-card" style="background: linear-gradient(135deg, #065f46, #059669);" onclick="window.open('https://easyusehub.blogspot.com/p/image-compressor.html', '_blank')">
-        <div class="ad-title">⚡ High-Speed Image Compressor</div>
-        <p>Reduce image size up to 90% without losing quality. Fast & Secure.</p>
-        <button class="ad-btn" style="background: #fff; color: #065f46;">Compress Now</button>
+    <div class="custom-ad-bridge" style="background: linear-gradient(135deg, #059669, #10b981);" onclick="window.open('https://easyusehub.blogspot.com/p/image-compressor.html', '_blank')">
+        <span class="ad-title">⚡ High-Speed Image Compressor</span>
+        <p style="margin:5px 0; font-size: 14px;">Reduce image size up to 90% without losing quality!</p>
+        <div class="ad-btn" style="background: #fff;">Compress Now</div>
     </div>
 
-    <div class="footer-nav">
-        <button class="btn-nav btn-pdf" onclick="window.location.href='https://easyusehub.blogspot.com/p/free-pdf-tools-online.html'">All PDF Tools</button>
-        <button class="btn-nav btn-home" onclick="window.location.href='https://easyusehub.blogspot.com'">Main Home</button>
+    <div class="custom-ad-bridge" style="background: linear-gradient(135deg, #f59e0b, #d97706);" onclick="window.open('https://easyusehub.blogspot.com/p/ultimate-calculators-hub.html', '_blank')">
+        <span class="ad-title">🔢 Smart Financial Calculators</span>
+        <p style="margin:5px 0; font-size: 14px;">Loan EMI, Age Calculator, and BMI Tracker at your fingertips.</p>
+        <div class="ad-btn" style="background: #000; color: #fff;">Open Calculators</div>
     </div>
+
+    <div class="buttons">
+        <button class="tools" onclick="window.location.href='https://easyusehub.blogspot.com/p/free-pdf-tools-online.html'">All PDF Tools</button>
+        <button class="home" onclick="window.location.href='https://easyusehub.blogspot.com'">Home</button>
+    </div>
+
 </div>
 
 <script>
-    function fetchThumb() {
-        const input = document.getElementById('ytUrl').value;
-        let id = "";
-        
-        // Advanced Regex to catch all types of YT links (Shorts, Mobile, Web)
+    async function downloadImage(imageSrc) {
+        // This function fixes the download issue by fetching image as Blob
+        const image = await fetch(imageSrc);
+        const imageBlog = await image.blob();
+        const imageURL = URL.createObjectURL(imageBlog);
+
+        const link = document.createElement('a');
+        link.href = imageURL;
+        link.download = 'EasyUseHub_YT_Thumbnail.jpg';
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+    }
+
+    function getThumb() {
+        let url = document.getElementById('videoUrl').value;
+        let vId = "";
+
         const regex = /(?:youtube\.com\/(?:[^\/]+\/.+\/|(?:v|e(?:mbed)?)\/|.*[?&]v=)|youtu\.be\/)([^"&?\/\s]{11})/;
-        const match = input.match(regex);
-        id = (match && match[1]) ? match[1] : "";
+        const match = url.match(regex);
+        vId = (match && match[1]) ? match[1] : "";
 
-        if (id) {
-            const highRes = `https://img.youtube.com/vi/${id}/maxresdefault.jpg`;
-            const preview = document.getElementById('previewImg');
+        if (vId) {
+            let imgUrl = `https://img.youtube.com/vi/${vId}/maxresdefault.jpg`;
+            document.getElementById('thumbPreview').src = imgUrl;
             
-            // Testing if MaxRes exists, if not fallback to HQ
-            preview.src = highRes;
-            document.getElementById('hdLink').href = highRes;
-            document.getElementById('result').style.display = "block";
+            // Set up the download button to use the new fix
+            document.getElementById('downloadBtn').onclick = function() {
+                downloadImage(imgUrl);
+            };
 
+            document.getElementById('resultArea').style.display = "block";
+            
             // Trigger Push Notification
             setTimeout(() => {
                 document.getElementById('push-notification').classList.add('active');
-            }, 1200);
+            }, 1000);
         } else {
-            alert("Invalid YouTube Link. Please try again!");
+            alert("Please paste a valid YouTube video link!");
         }
     }
 </script>
