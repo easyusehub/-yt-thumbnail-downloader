@@ -19,7 +19,7 @@ Built with simplicity and speed in mind, following the core values of **EasyUseH
 
 ## 🌐 Hosted Link
 You can access the tool live here: 
-👉 [https://your-username.github.io/yt-thumbnail-downloader/](https://your-username.github.io/yt-thumbnail-downloader/)
+👉 https://easyusehub.github.io/-yt-thumbnail-downloader/
 
 ## 📈 About EasyUseHub
 This tool is part of the **EasyUseHub** ecosystem, which provides 50+ essential web utilities for digital creators, including:
