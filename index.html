@@ -33,7 +33,7 @@
         .custom-ad-bridge:hover { transform: scale(1.02); }
         .ad-title { font-size: 18px; font-weight: bold; display: block; }
         .ad-btn { background: #fbbf24; color: #000; padding: 7px 18px; border-radius: 5px; font-weight: bold; display: inline-block; margin-top: 10px; font-size: 13px; }
-
+        
         /* Downloader UI */
         .downloader-box { background: #fff; padding: 35px 20px; border-radius: 15px; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
         input { width: 85%; padding: 15px; border: 2px solid #ddd; border-radius: 8px; font-size: 16px; outline: none; margin-bottom: 15px; box-sizing: border-box; }
@@ -57,7 +57,7 @@
     <img src="https://cdn-icons-png.flaticon.com/512/5968/5968313.png" alt="icon">
     <div class="push-text">
         <b>🚀 50+ Free Tools at EasyUseHub!</b>
-        <p>Try All PDF TOOL, Image Compressor, Tag extractor  & Calculators for FREE.</p>
+        <p>Try All PDF TOOL, Image Compressor, Tag extractor & Calculators for FREE.</p>
     </div>
 </div>
 
@@ -78,7 +78,6 @@
         <input type="text" id="videoUrl" placeholder="Paste YouTube Link (e.g. https://youtu.be/...)">
         <br>
         <button class="main-btn" onclick="getThumb()">Extract HD Thumbnail</button>
-
         <div id="resultArea">
             <img id="thumbPreview" src="" alt="Thumbnail Preview">
             <br>
@@ -108,29 +107,28 @@
 
 <script>
     async function downloadImage(imageSrc) {
-        const image = await fetch(imageSrc);
-        const imageBlog = await image.blob();
-        const imageURL = URL.createObjectURL(imageBlog);
-        const link = document.createElement('a');
-        link.href = imageURL;
-        link.download = 'EasyUseHub_YT_Thumbnail.jpg';
-        document.body.appendChild(link);
-        link.click();
-        document.body.removeChild(link);
+        try {
+            const image = await fetch(imageSrc);
+            const imageBlog = await image.blob();
+            const imageURL = URL.createObjectURL(imageBlog);
+            const link = document.createElement('a');
+            link.href = imageURL;
+            link.download = 'EasyUseHub_YT_Thumbnail.jpg';
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        } catch (error) {
+            // Fallback: If fetch fails due to CORS, open in new tab
+            window.open(imageSrc, '_blank');
+        }
     }
 
-    // Function to check if image resolution actually exists
     function checkImage(vId) {
         const qualities = [
             { id: 'maxresdefault', label: 'Full HD (1080p)' },
             { id: 'sddefault', label: 'Standard (640p)' },
             { id: 'hqdefault', label: 'High Quality (480p)' }
         ];
-
-        let found = false;
-        const preview = document.getElementById('thumbPreview');
-        const qualityText = document.getElementById('qualityText');
-        const downloadBtn = document.getElementById('downloadBtn');
 
         let i = 0;
         function tryNext() {
@@ -140,15 +138,20 @@
             let tempImg = new Image();
             
             tempImg.onload = function() {
-                // YouTube redirects to a tiny "not found" image if the quality doesn't exist.
-                // maxresdefault must be larger than 120px width to be valid.
                 if (this.width > 120) {
+                    const preview = document.getElementById('thumbPreview');
+                    const qualityText = document.getElementById('qualityText');
+                    const downloadBtn = document.getElementById('downloadBtn');
+                    
                     preview.src = imgUrl;
                     qualityText.innerText = "Quality: " + qualities[i].label;
                     downloadBtn.innerText = "Download " + qualities[i].label;
                     downloadBtn.onclick = function() { downloadImage(imgUrl); };
                     document.getElementById('resultArea').style.display = "block";
-                    found = true;
+                    
+                    setTimeout(() => {
+                        document.getElementById('push-notification').classList.add('active');
+                    }, 1000);
                 } else {
                     i++;
                     tryNext();
@@ -167,12 +170,19 @@
         vId = (match && match[1]) ? match[1] : "";
 
         if (vId) {
-            checkImage(vId); // Try multiple qualities
-            setTimeout(() => {
-                document.getElementById('push-notification').classList.add('active');
-            }, 1000);
-        } else {
+            checkImage(vId);
+        } else if (url !== "") {
             alert("Please paste a valid YouTube video link!");
+        }
+    }
+
+    // Blogger Iframe/Shared Link Auto-Detect Logic
+    window.onload = function() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const sharedUrl = urlParams.get('url');
+        if (sharedUrl) {
+            document.getElementById('videoUrl').value = decodeURIComponent(sharedUrl);
+            getThumb();
         }
     }
 </script>
